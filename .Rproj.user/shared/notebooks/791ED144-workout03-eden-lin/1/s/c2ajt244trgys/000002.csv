@@ -1,0 +1,7 @@
+"0","#' @export"
+"0","plot.bincum <- function(bincum_object){"
+"0","  plot(bincum_object$cumulative, xlab = ""success"", ylab = ""probability"")"
+"0","  lines(bincum_object$cumulative)"
+"0","}"
+"0","dis2 <- bin_cumulative(5, 0.5)"
+"0","plot(dis2)"

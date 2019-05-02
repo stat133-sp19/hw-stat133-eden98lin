@@ -1,0 +1,358 @@
+---
+title: "Homework 10"
+author: "Eden Lin"
+date: "April 30, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(DataComputing)
+```
+
+
+## Problem 10A
+```{r}
+chicks <- read.table("C:/Users/Eden/Desktop/UCB/Stat 135 Spring 2019/Homeworks/data/chicks-1.txt", header = TRUE)
+chicks
+```
+
+### a)
+```{r}
+chicks %>% ggplot(aes(x = el, y = cw)) + geom_point()
+
+# correlation
+cor(chicks$el, chicks$cw)
+```
+##### By looking at the plot, we can see that there is roughly a linear relationship between the dependent and independent variables, and they are correlated but not highly correlated, therefore the assumptions of the model are reasonable.
+```{r}
+#mean and standard deviation
+el_bar <- mean(chicks$el)
+el_bar
+cw_bar <- mean(chicks$cw)
+cw_bar
+
+el_sd <- sd(chicks$el)
+el_sd
+cw_sd <- sd(chicks$cw)
+cw_sd
+
+# slope and intercept
+b1_hat <- cov(chicks$el, chicks$cw)/var(chicks$el)
+b1_hat
+b0_hat = cw_bar - b1_hat * el_bar
+b0_hat
+
+# equation of the regression line
+y = b0_hat + b1_hat * chicks$el
+
+# draw regression line
+chicks %>% ggplot(aes(x = el, y = cw)) + geom_point() + geom_abline(slope = b1_hat, intercept = b0_hat)
+```
+
+### b)
+```{r}
+chicks %>% ggplot(aes(x = el, y = cw)) + geom_point() + geom_smooth(method = lm, se = FALSE)
+lm.el.model <- lm(chicks$cw ~ chicks$el)
+summary(lm.el.model)
+
+ggplot(lm.el.model) +geom_point(aes(x = .fitted, y = .resid))
+```
+##### The null hypothesis that is being tested here is that the predictors and response variables are independent, namely, b1 = 0.
+##### The alternative hypothesis is that the predictors and response variables are dependent, b1 != 0.
+##### We can see from the t and F statistics, we reject the null, so the intercept b1 is not zero, it implies that the predictors and response variables are dependent.
+
+### c)
+```{r}
+cor(chicks$el, chicks$cw)
+cor(chicks$eb, chicks$cw)
+cor(chicks$ew, chicks$cw)
+```
+##### The egg weight is most highly correlated with chick weight, so we will call this the best predictor for now.
+```{r}
+chicks %>% ggplot(aes(x = ew, y = cw)) + geom_point() + geom_smooth(method = lm, se = FALSE)
+
+lm.ew.model <- lm(chicks$cw ~ chicks$ew)
+ggplot(lm.ew.model) +geom_point(aes(x = .fitted, y = .resid))
+```
+##### The residual plot shows that the error variance is not constant but instead tend to grow with the egg weight, therefore the errors are heteroscedastic.
+
+### d)
+```{r}
+summary(lm.ew.model)
+y_hat <- -0.05827 + 0.71852 * 8.5
+y_hat
+t_42 <- qt(0.975, 42)
+t_42
+s_y_hat <- 0.2207 * sqrt(1/44 + ((8.5 - mean(chicks$ew)) ^ 2 / (44 * var(chicks$ew))))
+s_y_hat
+
+# 95% confidence interval
+CI_95 <- c(y_hat - t_42 * s_y_hat, y_hat + t_42 * s_y_hat)
+CI_95
+```
+
+### e)
+```{r}
+pred_y <- -0.05827 + 0.71852 * 8.5
+pred_y
+t_42 <- qt(0.975, 42)
+t_42
+s_y_hat <- 0.2207 * sqrt(1 + 1/44 + ((8.5 - mean(chicks$ew)) ^ 2 / (44 * var(chicks$ew))))
+s_y_hat
+
+# 95% prediction interval
+PI_95 <- c(pred_y - t_42 * s_y_hat, pred_y + t_42 * s_y_hat)
+PI_95
+```
+
+### f)
+```{r}
+summary(lm.ew.model)
+y_hat <- -0.05827 + 0.71852 * 12
+y_hat
+t_42 <- qt(0.975, 42)
+t_42
+s_y_hat <- 0.2207 * sqrt(1/44 + ((12 - mean(chicks$ew)) ^ 2 / (44 * var(chicks$ew))))
+s_y_hat
+
+# 95% confidence interval
+CI_95 <- c(y_hat - t_42 * s_y_hat, y_hat + t_42 * s_y_hat)
+CI_95
+
+pred_y <- -0.05827 + 0.71852 * 12
+pred_y
+t_42 <- qt(0.975, 42)
+t_42
+s_y_hat <- 0.2207 * sqrt(1 + 1/44 + ((12 - mean(chicks$ew)) ^ 2 / (44 * var(chicks$ew))))
+s_y_hat
+
+# 95% prediction interval
+PI_95 <- c(pred_y - t_42 * s_y_hat, pred_y + t_42 * s_y_hat)
+PI_95
+```
+##### Extrapolation: we can do the math with the data give, but whether the results are trustworthy is another story. In this case, beucase 12 grams is out of the range of our data, we actually cannot trust the intervals here because we have not way to make sure that the data follow the same trend outside of the given data range.
+
+## Problem 10B
+### a)
+```{r}
+lm.combined.model <- lm(chicks$cw ~ chicks$el + chicks$eb)
+summary(lm.combined.model)
+
+lm.combined.model %>% ggplot(aes(x = .fitted, y = .resid)) + geom_point()
+```
+##### There is no noticeable advantage of this model compare with the simple regression performed in Problem 10A. Both residual plots suggest heteroscedastic errors.
+
+## b)
+```{r}
+lm.eleb.model <- lm(chicks$ew ~ chicks$el + chicks$eb)
+summary(lm.eleb.model)
+
+lm.eleb.model %>% ggplot(aes(x = .fitted, y = .resid)) + geom_point()
+```
+##### The difference between the regression here and the two regressions that were compared in a is that the residual plot here shows no apprearant deviation from randomness, so we are more assure of the homoscedasticity here than the two in part a).
+
+### c)
+```{r}
+lm.combined2.model <- lm(chicks$cw ~ chicks$el + chicks$eb + chicks$ew)
+summary(lm.combined2.model)
+
+lm.combined2.model %>% ggplot(aes(x = .fitted, y = .resid)) + geom_point()
+```
+##### What the t statistics is telling us is that there exist no relationship between each egg variable and the chick wight variable. However, the F statistics tells us that at least one of the egg variables is not independent from the chick weight variable. This make sense because one of the assumptions of regression test, that there should not be or be little multicollinearity, is violated. Given what we see from part b), that there is a strong relationship among the egg variables, this assumption is not satisfied by this data set. Therefore, the regression is not impressive because it is not a valid regression, so having a high R-squared is useless.
+
+### d)
+```{r, eval=FALSE}
+lm.elew.model <- lm(chicks$cw ~ chicks$el + chicks$ew)
+summary(lm.elew.model)
+
+lm.elew.model %>% ggplot(aes(x = .fitted, y = .resid)) + geom_point()
+
+lm.ebew.model <- lm(chicks$cw ~ chicks$eb + chicks$ew)
+summary(lm.ebew.model)
+
+lm.ebew.model %>% ggplot(aes(x = .fitted, y = .resid)) + geom_point()
+
+lm.eleb.model <- lm(chicks$cw ~ chicks$el + chicks$eb)
+summary(lm.combined2.model)
+
+lm.eleb.model %>% ggplot(aes(x = .fitted, y = .resid)) + geom_point()
+```
+##### There is no one regression better than the others. They all have r-squared value of about 0.7.
+
+## Problem 10C
+```{r}
+tox <- read.table("C:/Users/Eden/Desktop/UCB/Stat 135 Spring 2019/Homeworks/data/tox.txt", header = TRUE)
+tox
+```
+
+### a)
+```{r}
+# parametric
+diff <- tox$base - tox$month15
+qqnorm(diff)
+qqline(diff, col = 2)
+```
+##### Since the differences look roughly normal, we can perform a paired t-test.
+```{r}
+t.test(tox$base, tox$month15, paired = TRUE)
+```
+##### From the t statistics, we can conclude that there is difference in the lung scores after 15 months. And we can say that the patients' lungs are worse because our t statistics is positive, that means the values in the base scores are overall higher than the scores 15 months later.
+```{r}
+# nonparametric
+wilcox.test(tox$base, tox$month15, paired = TRUE, correct = FALSE)
+```
+##### The test statistics and p-value here tell us the same thing as the parametric test.
+
+b)
+```{r}
+cor(tox)
+```
+##### The table of correlations show us that the most uncorrelated variables are base and rad, chemo and rad, and base and chemo, they all have correlation less than 1, which satisfy the assumption fo little multicollinearity. However, if we look at the correlation of month15 and rad, we can see that the number is actually very small, which suggests that there no linear relationship between the dependent and independent variables. On the reverse side, both chemo and base have some linear relationship with month15 as suggested by the correlations. Therefore, I will say the combination of chemo and base should be used to predict a patients score 15 months after treatment.
+
+## Problem 10D
+```{r}
+baby <- read.table("C:/Users/Eden/Desktop/UCB/Stat 135 Spring 2019/Homeworks/data/baby.txt", header = TRUE)
+head(baby)
+```
+
+### a)
+```{r}
+qqnorm(baby$bw)
+qqline(baby$bw, col = 2)
+```
+##### The normality is suggested by the qq plot.
+
+### b)
+```{r}
+hist(baby$mpw)
+qqnorm(baby$mpw)
+```
+##### We can see from the qq plot that there is a concave down curvature near the right side of the plot. This is corresponding to the left skewness of the histogram. If the skewness were in the other direction, the curve will be concave up.
+
+### c)
+```{r}
+cor(baby)
+```
+#### By looking at the first column of the correlation matrix, it seems like mothers age is not much linearily related to the birthweight, since it is the only variable that has a correlation with birthweight that is less than |0.1|. All other variables seem fine to be included in the set of predictors since they do not violate the multicollinearity given that in the gd column, all correlations except itself and birthweight are very small.
+
+## 10E
+```{r}
+women <- read.table("C:/Users/Eden/Desktop/UCB/Stat 135 Spring 2019/Homeworks/data/women.txt", header = TRUE)
+women
+```
+
+### a)
+```{r}
+lm.women.model <- lm(women$avew ~ women$h)
+summary(lm.women.model)
+
+cor(women)
+
+lm.women.model %>% ggplot(aes(x = .fitted, y = .resid)) + geom_point()
+```
+When we look at the correlation and r-squared value of the data, it actually look very good, however, the residual plot shows a strong v pattern, therefore the homoscedasticity is not satisfied.
+
+### b)
+##### The correlation would be less because as more variables are added to the data, more variability are introduced to the environment, therefore the dependent and independent variables would be less correlated.
+
+### c)
+```{r}
+lm.women.model %>% ggplot(aes(x = .fitted, y = .resid)) + geom_point() + stat_smooth(method = "lm", formula = y ~ poly(x, 2, raw = TRUE), col = "red")
+lm.women.model %>% ggplot(aes(x = .fitted, y = .resid)) + geom_point() + stat_smooth(method = "lm", formula = y ~ poly(x, 3, raw = TRUE), col = "blue")
+lm.women.model %>% ggplot(aes(x = .fitted, y = .resid)) + geom_point() + stat_smooth(method = "lm", formula = y ~ poly(x, 4, raw = TRUE), col = "green")
+```
+Looking at the fittings of all the lines, it seems like a polynomial of degree 3 covers the most points, therefore I will choose a polynomial of degree of 3.
+
+## Problem 10F 14.52
+```{r}
+bodytemp <- read.table("C:/Users/Eden/Desktop/UCB/Stat 135 Spring 2019/Homeworks/data/bodytemp.txt", header = TRUE)
+head(bodytemp)
+```
+
+### a)
+```{r}
+males <- subset(bodytemp, gender == 1)
+males %>% ggplot(aes(x = rate, y = temperature)) + geom_point()
+females <- subset(bodytemp, gender != 1)
+females %>% ggplot(aes(x = rate, y = temperature)) + geom_point()
+```
+##### For both males and females, there does not seem to be linear relationship between heart rate and temperature, all points are just randomly scatter around the graph.
+
+### b)
+```{r}
+bodytemp %>% ggplot(aes(x = rate, y = temperature, col = gender)) + geom_point()
+```
+The relationship for males appear to be the same as that for females becuase they all cluster together in the graph.
+
+### c)
+```{r}
+lm.males.model <- lm(males$rate ~ males$temperature)
+summary(lm.males.model)
+
+lm.males.model %>% ggplot(aes(x = .fitted, y = .resid)) + geom_point()
+```
+##### The t statistics and F statistics both tell us that the predictors and response variable are independent, therefore, even though the residual plot shows us the homoscedasticity, it is useless becuase the original plot is also very random. To answer the question, the relationship is not linear, it can be questioned if there even exists a relationship between them.
+
+### d)
+```{r}
+lm.females.model <- lm(females$rate ~ females$temperature)
+summary(lm.females.model)
+
+lm.females.model %>% ggplot(aes(x = .fitted, y = .resid)) + geom_point()
+```
+The conclusion here will be the same as in part c)
+
+### e)
+##### Null hypothesis: slopes for males and females are equal
+##### Alternative hypothesis: slopes for males and females are not equal
+```{r}
+t_126 <- (1.645 - 3.128)/sqrt(1.039^2 + 1.316^2)
+pt(t_126, df = 126)
+```
+Since we have a p-value that is almost 0.2, we cannot reject the null hypothesis, therefore it means the slopes for males and females are euqal
+
+### f)
+##### Null hypothesis: intercepts for males and females are equal
+##### Alternative hypothesis: intercepts for males and females are not equal
+```{r}
+t_126 <- (-87.967 + 233.624)/sqrt(101.919^2 + 129.463^2)
+pt(t_126, df = 126)
+```
+##### Since we have a very big p-value, we cannot reject the null hypothesis.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

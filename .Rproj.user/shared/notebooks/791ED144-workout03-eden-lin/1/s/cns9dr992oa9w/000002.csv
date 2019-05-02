@@ -1,0 +1,7 @@
+"0","#' @export"
+"0","plot.bindis <- function(bin_object){"
+"0","  barplot(height = bin_object$probability, names.arg = bin_object$success, border = NA, xlab = ""success"", ylab = ""probability"")"
+"0","}"
+"0","# plotting binomial probability distribution"
+"0","dis1 <- bin_distribution(5, 0.5)"
+"0","plot(dis1)"

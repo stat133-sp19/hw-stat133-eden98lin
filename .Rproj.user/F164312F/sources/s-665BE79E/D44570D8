@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1556835017754.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "D44570D8",
+    "lastKnownWriteTime" : 1556836261,
+    "last_content_update" : 1556836261644,
+    "path" : "C:/Users/Eden/Desktop/UCB/Stat 133 Spring 2019/Binomial Package2/binomial/tests/testthat/test-bionomials.R",
+    "project_path" : "tests/testthat/test-bionomials.R",
+    "properties" : {
+        "cursorPosition" : "50,37",
+        "scrollLine" : "13",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
