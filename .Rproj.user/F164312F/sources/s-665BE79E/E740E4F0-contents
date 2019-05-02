@@ -53,7 +53,7 @@ Implementing these functions given the arguments `"trials"` and `"prob"`, the va
 
 Another feature of this package the visual aid of graphing the binomial probability distribution and the cumulative probability distribution using `"plot()"` on an `"bindis"` object.\
 
-But before getting into that, two main function that contribute to making the graphs are `bin_distribution()` and `bin_cumulative()`. `bin_distribution()` will return an object of class `"bindis"` and display the distribution of the binomial random variable, the `bin_cumulative()` has the same feature but return an object of class `"bincum"` and have one more column in its distribution table at the end that indicate the cumulative probabilities.
+But before getting into that, two main function that contribute to making the graphs are `bin_distribution()` and `bin_cumulative()`. `bin_distribution()` will output a table that display the distribution of the binomial random variable, the `bin_cumulative()` has the same feature but have one more column at the end that indicate the cumulative probabilities.
 
 ```{r}
 dist1 <- bin_distribution(5, 0.2)

@@ -1,22 +1,22 @@
 {
     "collab_server" : "",
     "contents" : "",
-    "created" : 1556832651304.000,
+    "created" : 1556840592936.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "3044745881",
-    "id" : "48021F85",
+    "hash" : "0",
+    "id" : "60BDB673",
     "lastKnownWriteTime" : 1556836954,
-    "last_content_update" : 1556836954629,
+    "last_content_update" : 1556836954,
     "path" : "C:/Users/Eden/Desktop/UCB/Stat 133 Spring 2019/Binomial Package2/binomial/R/binvar.R",
     "project_path" : "R/binvar.R",
     "properties" : {
         "cursorPosition" : "52,14",
-        "scrollLine" : "21",
+        "scrollLine" : "54",
         "tempName" : "Untitled1"
     },
-    "relative_order" : 5,
+    "relative_order" : 3,
     "source_on_save" : false,
     "source_window" : "",
     "type" : "r_source"

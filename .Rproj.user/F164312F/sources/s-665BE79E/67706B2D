@@ -5,13 +5,15 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "2816335122",
+    "hash" : "0",
     "id" : "67706B2D",
-    "lastKnownWriteTime" : 1556837674,
-    "last_content_update" : 1556837674,
+    "lastKnownWriteTime" : 1556840762,
+    "last_content_update" : 1556840762582,
     "path" : "C:/Users/Eden/Desktop/UCB/Stat 133 Spring 2019/Binomial Package2/binomial/doc/introduction.Rmd",
     "project_path" : "doc/introduction.Rmd",
     "properties" : {
+        "cursorPosition" : "35,28",
+        "scrollLine" : "0"
     },
     "relative_order" : 10,
     "source_on_save" : false,
